@@ -8,7 +8,7 @@ Each page documents my process for solving CTF challenges — from enumeration t
 ## 📚 Writeups
 - [Vulnnet Internal](writeups/vulnnet_internal.md)
 
-*(Coming soon!)*
+*(More Coming soon!)*
 
 ---
 
