@@ -17,4 +17,13 @@ This is a room that highly focuses on internal networks/systems rather than more
 
 ## 🔎 Enumeration
 ### Nmap
-- 
+- First we run a basic nmap scan to see which ports are running. i used `sudo nmap -sC -sV -p- -Pn -T4 -O $ip --min-rate 1000 -oN vulnetnmap.txt`
+> Tip - instead of having to type in your ip every time type `export ip=machineip` where machineip is the actual ip. this makes a variable called ip which you can call using $ip. therefore instead of typing ip again and again you can just use $ip as the ip.
+
+![Nmap Scan](../images/vulnnet_internal.png)
+
+- As seen there are many ports since this is a network based ctf.
+- Some well-known ones we can see are smb and ssh.
+### SMB
+-dwa
+
