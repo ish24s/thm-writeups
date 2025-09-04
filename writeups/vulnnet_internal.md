@@ -28,12 +28,12 @@ This is a room that highly focuses on internal networks/systems rather than more
 - As we know smb is open we can enumerate for possible shares by using `smbclient -L //$ip -U` (since we dont know any usernames yet we dont put a username and leave it blank)
 > Note: you could also use enum4linux to enumerate as it does the same thing but it goes into more detail)
 
-![SMB](/images/vulnnet_internal/smbclient.png)
+![SMB](../images/vulnnet_internal/smbclient.png)
 
 - So weve found 3 shares available. IPC$ is a administrative share in SMB and is used for things like remote management and communications between processes/services. Trying to connect to IPC$ is not allowed and we get the same error for trying to connect to print share.
 - However we can connect to the shares share by doing `smbclient //$ip/shares -U`
 
-![serviceflag](/images/vulnnet_internal/servicesflag.png)
+![serviceflag](../images/vulnnet_internal/servicesflag.png)
 
 - As it is an smb share it has a few different commands so you will need to use get to download the txt file on your device then cat it on your terminal to get the 1st flag.
 ### Redis
@@ -42,7 +42,7 @@ This is a room that highly focuses on internal networks/systems rather than more
 - However we cannot use any commands as it requires authentication
 - We can try bruteforcing using hydra or nmap but it fails meaning bruteforcing is not the way.
 
-![Redisconnect](/images/vulnnet_internal/redis1.png)
+![Redisconnect](../images/vulnnet_internal/redis1.png)
 
 - since we have no info yet we will come back to this later
 ### NFS
@@ -52,13 +52,13 @@ This is a room that highly focuses on internal networks/systems rather than more
 - We can therefore create a mount point on our maching using `mkdir mnt`
 - Then we can mount it to our machine using `sudo mount -t nfs $ip:/opt/conf mnt`
 > Note: you can use any name for the directory you create i used mnt as its short and relatable. you would swap mnt here for the directory name you created
-![nfs1](/images/vulnnet_internal/mnt.png)
+![nfs1](../images/vulnnet_internal/mnt.png)
 
 - We see a redis directory. Maybe it can help us get into the redis server?
 - inside we find a redis.conf file. Reading it in nano we can see that there is a requirepass variable which means that the anyone connecting to a redis server must authenticate with this password to be able to use commands. So we
 have got the redis server password now.
 
-![redispass](/images/vulnnet_internal/redispass.png)
+![redispass](../images/vulnnet_internal/redispass.png)
 
 > Note: we can also use `cat redis.conf | grep requirepass` to find the password easier. we use the one that is uncommented.
 
@@ -75,11 +75,11 @@ have got the redis server password now.
 
 - Now we go into rsync folder and we find 3 users. sys-internal looks interesting. we go into folder and find user.txt
 
-![usertxt](/images/vulnnet_internal/user.txt.png)
+![usertxt](../images/vulnnet_internal/user.txt.png)
 
 ### SSH
 - By looking at the files on sys-internal we can see a .ssh dotfile. It has read write and exec permissions which is very interesting.
-![sshfile](/images/vulnnet_internal/ssh.png)
+![sshfile](../images/vulnnet_internal/ssh.png)
 
 - We can generate an ssh keypair with `ssh-keygen -f ./id_rsa` (make sure to do this in your own directory not the rsync one.
 - we can then upload the public key to the server using `rsync ./id_rsa.pub rsync://rsync-connect@$IP:873/files/sys-internal/.ssh/authorized_keys`
@@ -91,15 +91,15 @@ have got the redis server password now.
 - From here we could download linpeas or any linux privesc tools but going to root directory we can see a TeamCity directory
 - TeamCity is a CI server and looking further with `ps aux` we can see its running on the target on port 8111.
 - Looking around we find a readme.txt and we can see that on linux the server runs on localhost:8111 which is interesting.
-![readmeTC](/images/vulnnet_internal/teamcity.png)
+![readmeTC](../images/vulnnet_internal/teamcity.png)
 
 - since we cannot access it currently we can use something called ssh port forwarding to forward traffic through our machine to the targets localhost so we can open http://localhost:8111
 - We can do this by closing the current connection and opening another using `ssh -i id_rsa sys-internal@$ip -L 8111:localhost:8111`
-![sshpf](/images/vulnnet_internal/sshpf.png)
+![sshpf](../images/vulnnet_internal/sshpf.png)
 
 - Now we have a connection we can access the TeamCity login page with http://localhost:8111 on our own browser.
 - We can see that there is a super user login which only requires a auth token.
-![TClogin](/images/vulnnet_internal/loginpage.png)
+![TClogin](../images/vulnnet_internal/loginpage.png)
 
 - We can go back to the ssh connection and look for tokens which may be hidden in config files etc.
 - logs could potentially hold some valuable info. using `grep -r tokens logs/ 2>/dev/null` we find a bunch of auth tokens which relate to the superuser.
@@ -107,20 +107,20 @@ have got the redis server password now.
 
 - Now we try each token till we log in.
 -Then we create a project manually
-![project](/images/vulnnet_internal/createproj.png)
+![project](../images/vulnnet_internal/createproj.png)
 
 - Then create a build configuration and skip the VCS root step
 - Then create a new build step and this is where you add your reverse shell.
 - TeamCity supports a few languages that reverse shells work with but i chose python. Use a custom script and add your reverse shell there.
 > Note: if using a python script there is no need to use python -c as the script will be executed as python anyway. so using it may break the script though i havent tested.
 
-![customscript](/images/vulnnet_internal/customscript.png)
+![customscript](../images/vulnnet_internal/customscript.png)
 
 - Now run your listener
-![listener](/images/vulnnet_internal/nc.png)
+![listener](../images/vulnnet_internal/nc.png)
 
 - And run the script at the top. Hopefully you should get a connection. Go to root directory to get the last flag.
-![rootflag](/images/vulnnet_internal/root.png)
+![rootflag](../images/vulnnet_internal/root.png)
 
 ---
 
