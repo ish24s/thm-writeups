@@ -65,7 +65,7 @@ have got the redis server password now.
 - Now we can connect to redis again and use the command `AUTH B65Hx562F@ggAZ@F` and we can now use any command.
 - If we use keys * we can find all the keys. from there we find "internal flag" key. we can use `get "internal flag"` to find the 2nd flag.
 - By looking around we see that the authlist is a list of tokens by using `lrange authlist 0 -1`. This displays the contents of the authlist key from the start to the end.
-- the contents show the same base64 encoded string which we can decode using your faviourite decoder (i used cyberchef) and we get a string which states that the password for rsync(another service) is "Hcg3HP67@TW@Bc72v"
+- the contents show the same base64 encoded string which we can decode using your favourite decoder (i used cyberchef) and we get a string which states that the password for rsync(another service) is "Hcg3HP67@TW@Bc72v"
 ### Rsync
 - this service syncs files between 2 remote machines.
 - to connect to rsync we need to create a folder called rsync to put the files inside.
