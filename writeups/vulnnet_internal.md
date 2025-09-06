@@ -55,7 +55,7 @@ This is a room that highly focuses on internal networks/systems rather than more
 ![nfs1](../images/vulnnet_internal/mnt.png)
 
 - We see a redis directory. Maybe it can help us get into the redis server?
-- inside we find a redis.conf file. Reading it in nano we can see that there is a requirepass variable which means that the anyone connecting to a redis server must authenticate with this password to be able to use commands. So we
+- inside we find a redis.conf file. Reading it in nano we can see that there is a requirepass variable which means that anyone connecting to a redis server must authenticate with this password to be able to use commands. So we
 have got the redis server password now.
 
 ![redispass](../images/vulnnet_internal/redispass.png)
@@ -64,7 +64,7 @@ have got the redis server password now.
 
 - Now we can connect to redis again and use the command `AUTH B65Hx562F@ggAZ@F` and we can now use any command.
 - If we use keys * we can find all the keys. from there we find "internal flag" key. we can use `get "internal flag"` to find the 2nd flag.
-- By looking around we see that the authlist is a list of tokens b using `lrange authlist 0 -1` this displays the contents of the authlist key from the start to the end.
+- By looking around we see that the authlist is a list of tokens by using `lrange authlist 0 -1`. This displays the contents of the authlist key from the start to the end.
 - the contents show the same base64 encoded string which we can decode using your faviourite decoder (i used cyberchef) and we get a string which states that the password for rsync(another service) is "Hcg3HP67@TW@Bc72v"
 ### Rsync
 - this service syncs files between 2 remote machines.
