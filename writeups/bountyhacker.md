@@ -23,7 +23,7 @@ This is a very easy room, no unexpected twists just a straightforward challenge.
 - This means we can log in using the username 'anonymous'
 - And now were logged in. We can see 2 files (locks.txt and task.txt) that we can download using `get`
 
-![ftp(/images/BountyHacker/ftpget.png)
+![ftp](/images/BountyHacker/ftpget.png)
 
 - Now looking at these files gives us some interesting information
 
