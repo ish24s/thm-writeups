@@ -45,7 +45,7 @@ This is a room with no specific focus. It covers a little bit of everything. The
 - As it is a wordpress website it likely contains lots of subdirectories (could maybe find some accidentally made public config files)  which we can find using ffuf or gobuster. However this doesnt result in anything useful. There is a wp-admin but not relevant right now.
 - Looking back at the txt file we can try looking up the /subrion directory however it hangs and doesnt give us a page.
 - Using `curl -v $ip` we can see that it gives a 302 redirect. We can enumerate this further aswell by using gobuster/ffuf. Gobuster may give an error so by using ffuf we can find a subdirectory called /panel which relates to txt file.
-> Note: by using -fc 302 for ffuf we can exclude all 302 redirects.
+> Tip: by using -fc 302 for ffuf we can exclude all 302 redirects.
 
 ![curl](../images/Tech%20Support/curl302.png)
 
@@ -88,3 +88,32 @@ This is a room with no specific focus. It covers a little bit of everything. The
 -By reading the file we see a password which might possibly be for ssh and the scamsite user.
 
 ![ssh](../images/Tech%20Support/sshpass.png)
+
+- Now we can login to using ssh with `sudo ssh scamsite@$ip`
+
+![sshlogin](../images/Tech%20Support/sshlogin.png)
+
+- Now we can try various methods to privilege escalate to root. However one way is to use `sudo -l` which lists any commands we can run as root without needing a password. Conveniently it works for us.
+
+![sudol](../images/Tech%20Support/sudol.png)
+
+- Now we have a binary we can use to privilege escalate. To exploit this we need to go go [GTFOBins](https://gtfobins.github.io/) and search iconv to find methods to exploit the binary.
+
+![gtfo](../images/Tech%20Support/bins.png)
+
+- From here we can try read the root file as we know its called root.txt. First we do `LFILE=/root/root.txt`. This gives us a parameter we can input into the next command. We put /root due to us not having access to the root directory so we have to give the full path. Now we use `iconv -f 8859_1 -t 8859_1 "$LFILE"` to read the root file which will give us the flag.
+> Note: I have not displayed the flag to prevent cheating. The command below results in the flag.
+
+![root](../images/Tech%20Support/root.png)
+
+---
+
+## Afterthoughts
+- Overall not incredibly complex but still some hard parts including the privilege escalation. For more info on Linux PrivEsc I highly recommend ![this](https://tryhackme.com/room/linprivesc) room on THM. Shows a lot of techniques including many the one in this challenge.
+- This also encourages using various tools for different areas such as gobuster and ffuf due to gobuster throwing errors.
+
+---
+
+### Questions or Issues
+- Discord (ish24s)
+- Email (ismaeelj888@gmail.com)
