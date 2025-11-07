@@ -116,4 +116,4 @@ This is a room with no specific focus. It covers a little bit of everything. The
 
 ### Questions or Issues
 - Discord (ish24s)
-- Email (ismaeelj888@gmail.com)
+- Email (a56sp6fye@mozmail.com)
