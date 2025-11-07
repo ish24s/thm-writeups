@@ -133,4 +133,4 @@ have got the redis server password now.
 
 ### Questions or Issues
 - Discord (ish24s)
-- Email (ismaeelj888@gmail.com)
+- Email (a56sp6fye@mozmail.com)
