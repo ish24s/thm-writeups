@@ -70,4 +70,4 @@ This is a very easy room, no unexpected twists just a straightforward challenge.
 
 ### Questions or Issues
 - Discord (ish24s)
-- Email (ismaeelj888@gmail.com)
+- Email (a56sp6fye@mozmail.com)
